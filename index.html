@@ -308,64 +308,63 @@ function openHackApp() {
   document.getElementById("hackApp").style.display = "block";
 
   const box = document.getElementById("hackText");
-  box.textContent = "";
+  box.innerHTML = "";
 
-  const lines = [
-    "Запуск Hacker App...",
-    "Инициализация модулей...",
-    "Сканирование сети...",
-    "Поиск маршрутизатора...",
-    "Подключение..."
-  ];
-
-  const afterLines = [
-    "Поиск устройств в сети...",
-    "Обработка данных...",
-    "взлом...",
-    "Готово взлом завершен доступ к устройству получен."
+  const steps = [
+    ["Запуск Hacker App...", 700],
+    ["Инициализация модулей...", 700],
+    ["Сканирование сети...", 700],
+    ["Поиск маршрутизатора...", 700],
+    ["Подключение...", 700],
   ];
 
   let i = 0;
 
-  function addLine(text) {
-    box.textContent += text + "\n";
-  }
-
-  function showStartLines() {
-    if (i < lines.length) {
-      addLine(lines[i]);
-      i++;
-      setTimeout(showStartLines, 700);
+  function printStep() {
+    if (i < steps.length) {
+      box.innerHTML += steps[i][0] + "\n";
+      setTimeout(() => {
+        i++;
+        printStep();
+      }, steps[i][1]);
     } else {
-      showProgress();
+      runProgress();
     }
   }
 
-  function showProgress() {
+  function runProgress() {
     let percent = 0;
-    const progress = document.createElement("div");
-    progress.textContent = "Прогресс: 0%";
-    box.appendChild(progress);
+    const progressLine = document.createElement("div");
+    progressLine.textContent = "Прогресс: 0%";
+    box.appendChild(progressLine);
 
     const timer = setInterval(() => {
       percent++;
-      progress.textContent = "Прогресс: " + percent + "%";
+      progressLine.textContent = "Прогресс: " + percent + "%";
 
-      if (percent >= 100) {
+      if (percent === 100) {
         clearInterval(timer);
-        setTimeout(() => showAfterLines(0), 5000);
+
+        setTimeout(() => {
+          box.innerHTML += "\nПоиск устройств в сети...\n";
+        }, 5000);
+
+        setTimeout(() => {
+          box.innerHTML += "Обработка данных...\n";
+        }, 10000);
+
+        setTimeout(() => {
+          box.innerHTML += "Синхронизация...\n";
+        }, 15000);
+
+        setTimeout(() => {
+          box.innerHTML += "Готово.\n";
+        }, 20000);
       }
     }, 35);
   }
 
-  function showAfterLines(index) {
-    if (index >= afterLines.length) return;
-
-    addLine(afterLines[index]);
-    setTimeout(() => showAfterLines(index + 1), 5000);
-  }
-
-  showStartLines();
+  printStep();
 }
   
   
