@@ -347,29 +347,27 @@ function openHackApp() {
       }
     }, 35);
   }
+function afterProgress() {
+  const afterLines = [
+    "Поиск устройств в сети...",
+    "Обработка данных...",
+    "Синхронизация...",
+    "Готово."
+  ];
 
-  function afterProgress() {
-    const afterLines = [
-      "Поиск устройств в сети...",
-      "Обработка данных...",
-      "Синхронизация...",
-      "Готово."
-    ];
+  let j = 0;
 
-    let j = 0;
-
-    const afterTimer = setInterval(() => {
-      if (j < afterLines.length) {
-        box.innerHTML += afterLines[j] + "\n";
-        j++;
-      } else {
-        clearInterval(afterTimer);
-      }
-    }, 5000);
+  function showNextLine() {
+    if (j < afterLines.length) {
+      box.innerHTML += afterLines[j] + "\n";
+      j++;
+      setTimeout(showNextLine, 5000); // следующая строка через 5 секунд
+    }
   }
 
-  typeLines();
+  showNextLine();
 }
+  
   
 
 
