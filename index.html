@@ -307,52 +307,68 @@ function closeCamera() {
 function openHackApp() {
   document.getElementById("hackApp").style.display = "block";
 
+  const box = document.getElementById("hackText");
+  box.innerHTML = "";
+
   const lines = [
-  "Запуск системы...",
-  "Инициализация модулей...",
-  "Сканирование сети...",
-  "Поиск маршрутизатора...",
-  "Подключение..."
-];
+    "Запуск Hacker App...",
+    "Инициализация модулей...",
+    "Сканирование сети...",
+    "Поиск маршрутизатора...",
+    "Подключение..."
+  ];
 
-const box = document.getElementById("hackText");
-box.innerHTML = "";
+  let i = 0;
 
-let i = 0;
-
-function nextLine() {
-  if (i < lines.length) {
-    box.innerHTML += lines[i] + "\n";
-    i++;
-    setTimeout(nextLine, 700);
-  } else {
-    animateProgress();
-  }
-}
-
-function animateProgress() {
-  let percent = 0;
-
-  const progress = document.createElement("div");
-  progress.textContent = "Прогресс: 0%";
-  box.appendChild(progress);
-
-  const timer = setInterval(() => {
-    percent++;
-    progress.textContent = "Прогресс: " + percent + "%";
-
-    if (percent >= 100) {
-      clearInterval(timer);
-
-      box.innerHTML += "\nПоиск устройств в сети...\n";
-      box.innerHTML += "Обработка данных...\n";
-      box.innerHTML += "Синхронизация...\n";
-      box.innerHTML += "Готово.\n";
+  function typeLines() {
+    if (i < lines.length) {
+      box.innerHTML += lines[i] + "\n";
+      i++;
+      setTimeout(typeLines, 700);
+    } else {
+      startProgress();
     }
-  }, 35);
-}
+  }
 
-  nextLine();
+  function startProgress() {
+    let percent = 0;
+
+    const progress = document.createElement("div");
+    progress.textContent = "Прогресс: 0%";
+    box.appendChild(progress);
+
+    const timer = setInterval(() => {
+      percent++;
+      progress.textContent = "Прогресс: " + percent + "%";
+
+      if (percent >= 100) {
+        clearInterval(timer);
+        afterProgress();
+      }
+    }, 35);
+  }
+
+  function afterProgress() {
+    const afterLines = [
+      "Поиск устройств в сети...",
+      "Обработка данных...",
+      "Синхронизация...",
+      "Готово."
+    ];
+
+    let j = 0;
+
+    const afterTimer = setInterval(() => {
+      if (j < afterLines.length) {
+        box.innerHTML += afterLines[j] + "\n";
+        j++;
+      } else {
+        clearInterval(afterTimer);
+      }
+    }, 5000);
+  }
+
+  typeLines();
 }
   
 
