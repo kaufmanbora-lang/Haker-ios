@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prank Phone OS</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: white;
+  overflow: hidden;
+}
+
+#boot {
+  position: fixed;
+  inset: 0;
+  background: #020b05;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00ff66;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 38px;
+  font-weight: bold;
+  text-shadow: 0 0 20px #00ff66;
+}
+
+.loading {
+  margin-top: 20px;
+  font-size: 14px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+
+#phone {
+  height: 100vh;
+  padding: 12px;
+  background:
+    linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+    url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1000");
+  background-size: cover;
+  background-position: center;
+  display: none;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.battery {
+  border: 2px solid white;
+  width: 28px;
+  height: 14px;
+  border-radius: 3px;
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.battery::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 3px;
+  width: 3px;
+  height: 6px;
+  background: white;
+}
+
+.battery-level {
+  height: 100%;
+  width: 76%;
+  background: #00ff66;
+}
+
+.big-time {
+  text-align: center;
+  margin-top: 45px;
+  font-size: 58px;
+  font-weight: 300;
+}
+
+.date {
+  text-align: center;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.apps {
+  margin-top: 70px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  text-align: center;
+}
+
+.app {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 6px;
+  border-radius: 16px;
+  background: rgba(0, 255, 102, 0.18);
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 12px #00ff66;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.dock {
+  position: fixed;
+  bottom: 18px;
+  left: 16px;
+  right: 16px;
+  height: 76px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 26px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dock .icon {
+  margin: 0;
+}
+
+.window {
+  position: fixed;
+  inset: 0;
+  background: #020202;
+  color: #00ff66;
+  z-index: 30;
+  display: none;
+  padding: 15px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #00ff66;
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: #00ff66;
+  font-size: 26px;
+}
+
+#cameraVideo {
+  width: 100%;
+  height: 70vh;
+  background: #000;
+  object-fit: cover;
+  border: 1px solid #00ff66;
+  border-radius: 18px;
+}
+
+.terminal {
+  white-space: pre-line;
+  font-family: Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.red {
+  color: #ff0033;
+}
+</style>
+</head>
+
+<body>
+
+<div id="boot">
+  <div class="logo">HACK OS</div>
+  <div class="loading">Запуск системы...</div>
+</div>
+
+<div id="phone">
+  <div class="status">
+    <div id="smallTime">12:00</div>
+    <div>5G <span class="battery"><span class="battery-level"></span></span></div>
+  </div>
+
+  <div class="big-time" id="bigTime">12:00</div>
+  <div class="date" id="date">Воскресенье</div>
+
+  <div class="apps">
+    <div class="app" onclick="openHackApp()"><div class="icon">💀</div>Nearby Hack</div>
+    <div class="app"><div class="icon">🔐</div>Vault</div>
+    <div class="app"><div class="icon">📡</div>Scanner</div>
+    <div class="app"><div class="icon">⚙️</div>Settings</div>
+
+    <div class="app"><div class="icon">🧬</div>Matrix</div>
+    <div class="app"><div class="icon">📁</div>Files</div>
+    <div class="app"><div class="icon">🛰️</div>Signal</div>
+
+    <div class="app" onclick="openTelegram()">
+      <div class="icon">✈️</div>
+      Dark Telegram
+    </div>
+  </div>
+
+  <div class="dock">
+    <div class="icon">📞</div>
+    <div class="icon">💬</div>
+    <div class="icon">🌐</div>
+    <div class="icon" onclick="openCamera()">📷</div>
+  </div>
+</div>
+
+<div id="cameraApp" class="window">
+  <div class="top">
+    <button class="back" onclick="closeCamera()">←</button>
+    <h2>Camera</h2>
+  </div>
+  <video id="cameraVideo" autoplay playsinline></video>
+</div>
+
+<div id="hackApp" class="window">
+  <div class="top">
+    <button class="back" onclick="closeHackApp()">←</button>
+    <h2>Nearby Hack</h2>
+  </div>
+  <div class="terminal" id="hackText"></div>
+</div>
+
+<script>
+let cameraStream = null;
+
+setTimeout(() => {
+  document.getElementById("boot").style.display = "none";
+  document.getElementById("phone").style.display = "block";
+}, 3000);
+
+function updateTime() {
+  const now = new Date();
+  const time = now.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  document.getElementById("smallTime").textContent = time;
+  document.getElementById("bigTime").textContent = time;
+
+  document.getElementById("date").textContent =
+    now.toLocaleDateString("ru-RU", {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
+    });
+}
+
+function openTelegram() {
+  window.location.href = "https://web.telegram.org/";
+}
+
+async function openCamera() {
+  document.getElementById("cameraApp").style.display = "block";
+
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" },
+      audio: false
+    });
+
+    document.getElementById("cameraVideo").srcObject = cameraStream;
+  } catch (e) {
+    alert("Камера не запустилась. Разреши доступ к камере в браузере.");
+  }
+}
+
+function closeCamera() {
+  document.getElementById("cameraApp").style.display = "none";
+
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+}
+
+function openHackApp() {
+  document.getElementById("hackApp").style.display = "block";
+
+  const lines = [
+  "Запуск системы...",
+  "Инициализация модулей...",
+  "Сканирование сети...",
+  "Поиск маршрутизатора...",
+  "Подключение..."
+];
+
+const box = document.getElementById("hackText");
+box.innerHTML = "";
+
+let i = 0;
+
+function nextLine() {
+  if (i < lines.length) {
+    box.innerHTML += lines[i] + "\n";
+    i++;
+    setTimeout(nextLine, 700);
+  } else {
+    animateProgress();
+  }
+}
+
+function animateProgress() {
+  let percent = 0;
+
+  const progress = document.createElement("div");
+  progress.textContent = "Прогресс: 0%";
+  box.appendChild(progress);
+
+  const timer = setInterval(() => {
+    percent++;
+    progress.textContent = "Прогресс: " + percent + "%";
+
+    if (percent >= 100) {
+      clearInterval(timer);
+
+      box.innerHTML += "\nПоиск устройств в сети...\n";
+      box.innerHTML += "Обработка данных...\n";
+      box.innerHTML += "Синхронизация...\n";
+      box.innerHTML += "Готово.\n";
+    }
+  }, 35);
+}
+
+nextLine();
+  
+
+  const box = document.getElementById("hackText");
+  box.innerHTML = "";
+  let i = 0;
+
+  const timer = setInterval(() => {
+    if (i < lines.length) {
+      if (lines[i].includes("ПРАНК")) {
+        box.innerHTML += '<span class="red">' + lines[i] + "</span>\n";
+      } else {
+        box.innerHTML += lines[i] + "\n";
+      }
+      i++;
+    } else {
+      clearInterval(timer);
+    }
+  }, 600);
+}
+
+function closeHackApp() {
+  document.getElementById("hackApp").style.display = "none";
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>
