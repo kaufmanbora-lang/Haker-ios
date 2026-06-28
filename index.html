@@ -308,7 +308,7 @@ function openHackApp() {
   document.getElementById("hackApp").style.display = "block";
 
   const box = document.getElementById("hackText");
-  box.innerHTML = "";
+  box.textContent = "";
 
   const lines = [
     "Запуск Hacker App...",
@@ -318,21 +318,31 @@ function openHackApp() {
     "Подключение..."
   ];
 
+  const afterLines = [
+    "Поиск устройств в сети...",
+    "Обработка данных...",
+    "взлом...",
+    "Готово взлом завершен доступ к устройству получен."
+  ];
+
   let i = 0;
 
-  function typeLines() {
+  function addLine(text) {
+    box.textContent += text + "\n";
+  }
+
+  function showStartLines() {
     if (i < lines.length) {
-      box.innerHTML += lines[i] + "\n";
+      addLine(lines[i]);
       i++;
-      setTimeout(typeLines, 700);
+      setTimeout(showStartLines, 700);
     } else {
-      startProgress();
+      showProgress();
     }
   }
 
-  function startProgress() {
+  function showProgress() {
     let percent = 0;
-
     const progress = document.createElement("div");
     progress.textContent = "Прогресс: 0%";
     box.appendChild(progress);
@@ -343,29 +353,19 @@ function openHackApp() {
 
       if (percent >= 100) {
         clearInterval(timer);
-        afterProgress();
+        setTimeout(() => showAfterLines(0), 5000);
       }
     }, 35);
   }
-function afterProgress() {
-  const afterLines = [
-    "Поиск устройств в сети...",
-    "Обработка данных...",
-    "Синхронизация...",
-    "Готово."
-  ];
 
-  let j = 0;
+  function showAfterLines(index) {
+    if (index >= afterLines.length) return;
 
-  function showNextLine() {
-    if (j < afterLines.length) {
-      box.innerHTML += afterLines[j] + "\n";
-      j++;
-      setTimeout(showNextLine, 5000); // следующая строка через 5 секунд
-    }
+    addLine(afterLines[index]);
+    setTimeout(() => showAfterLines(index + 1), 5000);
   }
 
-  showNextLine();
+  showStartLines();
 }
   
   
